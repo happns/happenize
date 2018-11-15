@@ -1,5 +1,5 @@
 export default function (components, func, ns) {
-	var App = this && this.compileProvider ? this : window.App;
+	var App = this && ((typeof (func) === 'string' && this[func]) || this.compileProvider) ? this : window.App;
 
 	ns = ns && `${ns}.` || '';
 
