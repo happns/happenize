@@ -43,7 +43,7 @@ export default function (component, ns) {
     };
 
     component.link = function (scope, element, attrs) {
-        const tagName = ns.replace('.', '_');
+        const tagName = ns.replace(/\./g, '_');
         element.attr(`_c_${tagName}`, '');
 
         if (link) {
