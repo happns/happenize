@@ -43,7 +43,11 @@ export default function (component, ns) {
     };
 
     component.link = function (scope, element, attrs) {
-        const tagName = ns.replace(/\./g, '_');
+        const camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+        const nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');
+
+        const tagName = nsToDirectiveTagName(ns);
+
         element.attr(`_c_${tagName}`, '');
 
         if (link) {
