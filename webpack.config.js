@@ -63,7 +63,7 @@ function createConfiguration (moduleName) {
 			}
 		},
 		resolveLoader: {
-			modulesDirectories: ['web_loaders', 'web_modules', 'node_loaders', 'node_modules', 'node_modules/happenize/web_modules'],
+			modulesDirectories: ['web_loaders', 'web_modules', 'node_loaders', 'node_modules', path.join(__dirname, 'web_modules')],
 			root: path.join(__dirname, 'node_modules')
 		},
 		plugins: [
