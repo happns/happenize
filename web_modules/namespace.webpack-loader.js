@@ -6,9 +6,10 @@ module.exports = function(content, handler) {
 
     var ignored = ['', 'shared', 'partials', 'components', 'dialogs', 'bottomSheets'];
 
-    var entryPath = path.join(this.options.context, this.options.module.dir);
+    var entryPath = this.rootContext;
 
     if (this.context.indexOf(entryPath) !== -1) {
+
         var itemPath = this.context.replace(entryPath, '');
         var itemPathArray = itemPath.split(path.sep);
  
@@ -19,7 +20,9 @@ module.exports = function(content, handler) {
         var camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
         var nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');
 
-        return handler({ namespace, camelCaseToDashes, nsToDirectiveTagName, isRootComponent, itemCollectionName })
+        var result = handler({ namespace, camelCaseToDashes, nsToDirectiveTagName, isRootComponent, itemCollectionName })
+
+        return result;
     }
 
     return content;
