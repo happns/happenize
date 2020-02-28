@@ -1,5 +1,5 @@
 import registerNamespace from './registerNamespace.js';
-import registerComponent from './registerComponent.js'
+import registerComponent from './registerComponent.js';
 import themeable from './themeable';
 
 export default function registerPartials(components, ns, isThemeable = false) {

@@ -1,15 +1,17 @@
-var fs = require('fs');
 var path = require('path');
+var getOptions = require('loader-utils').getOptions;
 
 module.exports = function(content, handler) {
     this.cacheable();
 
+    const options = getOptions(this) || {};
     var ignored = ['', 'shared', 'partials', 'components', 'dialogs', 'bottomSheets'];
 
-    var entryPath = this.rootContext;
+    var entryPath = options.entryPath || this.rootContext;
+    entryPath = Array.isArray(entryPath) ? entryPath : [ entryPath ];    
+    entryPath = entryPath.filter(entryPath => this.context.indexOf(entryPath) !== -1)[0];
 
-    if (this.context.indexOf(entryPath) !== -1) {
-
+    if (entryPath) {
         var itemPath = this.context.replace(entryPath, '');
         var itemPathArray = itemPath.split(path.sep);
  

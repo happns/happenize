@@ -1,7 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var autoGenerateIndex = require('./web_modules/autoGenerateIndex.webpack-plugin.js');
+
+var AutoGenerateIndexPlugin = require('./web_modules/autoGenerateIndex.webpack-plugin.js');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -16,15 +17,19 @@ var i18nPostLoader = function (source) {
 	return new ConcatSource("{\n", source, "\n}\n");
 };
 
-function createConfiguration(moduleName) {
+function createConfiguration(moduleName, options = {}) {
+
 	var modulePaths = [`./src/${moduleName}/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
 
 	var moduleEntry = modulePaths.filter(path => fs.existsSync(path))[0];
 	var moduleDir = path.resolve(path.dirname(moduleEntry));
 
+	const context = path.resolve(moduleDir);
+	const entryPath = options.entryPath || context;
+
 	var webpackConfig = {
 		entry: ['babel-regenerator-runtime', './' + path.basename(moduleEntry)],
-		context: path.resolve(moduleDir),
+		context,
 		output: {
 			filename: `${moduleName}.js`,
 		},
@@ -32,7 +37,11 @@ function createConfiguration(moduleName) {
 			rules: [
 				{
 					test: /\.less$/,
-					use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader', 'less-namespace.webpack-loader']
+					use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader', 
+					{
+						loader: 'less-namespace.webpack-loader',
+						options: { entryPath }
+					}]
 				},
 				{
 					test: /\.css$/,
@@ -40,7 +49,13 @@ function createConfiguration(moduleName) {
 				},
 				{
 					test: /\.html$/,
-					use: ['html-loader', 'html-namespace.webpack-loader']
+					use: [
+						'html-loader',
+						{
+							loader: 'html-namespace.webpack-loader',
+							options: { entryPath }
+						}
+					]
 				},
 				{
 					test: /\.js$/,
@@ -89,7 +104,7 @@ function createConfiguration(moduleName) {
 			]
 		},
 		plugins: [
-			autoGenerateIndex,
+			new AutoGenerateIndexPlugin({ entryPath }),
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional

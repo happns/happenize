@@ -1,5 +1,7 @@
 var fs = require('fs');
 
+const exclude = ['__tests__'];
+
 module.exports = function(content) {
 	this.cacheable();
 	this.addContextDependency(this.context);
@@ -10,7 +12,7 @@ module.exports = function(content) {
 		var src = '';
 
 		var modules = contents
-		.filter(fileName => fileName[0] !== '.')
+		.filter(fileName => fileName[0] !== '.' && !exclude.some(x => fileName.indexOf(x) !== -1))
 		.map(fileName => { 
 				var name = fileName.split('.')[0];
 
