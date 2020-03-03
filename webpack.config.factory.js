@@ -85,6 +85,7 @@ function createConfiguration(moduleName, options = {}) {
 				'node_modules',
 				'./src/assets/libs',
 				`${moduleDir}/shared`,
+				`${moduleDir}/assets`,
 				`${moduleDir}/assets/libs`,
 				'web_loaders',
 				'web_modules',
