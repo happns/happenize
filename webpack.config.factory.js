@@ -21,6 +21,10 @@ function createConfiguration(moduleName, options = {}) {
 
 	var modulePaths = [`./src/${moduleName}/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
 
+	if (options.modulePath) {
+		modulePaths.push(options.modulePath);
+	}
+
 	var moduleEntry = modulePaths.filter(path => fs.existsSync(path))[0];
 	var moduleDir = path.resolve(path.dirname(moduleEntry));
 
