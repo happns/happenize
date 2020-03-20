@@ -18,6 +18,7 @@
     "live-server": "^1.2.1",
     "markdown-loader": "^5.1.0",
     "mini-css-extract-plugin": "^0.9.0",
+    "extract-text-webpack-plugin": "marekmicek/extract-text-webpack-plugin",
     "q": "^1.4.1",
     "rxjs": "^5.0.0-rc.1",
     "style-loader": "^1.1.3",

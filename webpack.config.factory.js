@@ -1,28 +1,27 @@
 var fs = require('fs');
 var path = require('path');
-var webpack = require('webpack');
 
 var AutoGenerateIndexPlugin = require('./web_modules/autoGenerateIndex.webpack-plugin.js');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-var ConcatSource = require("webpack-sources").ConcatSource;
+var ConcatSource = require('webpack-sources').ConcatSource;
 
 var i18nPostLoader = function (source) {
 	for (var i = 0; i < source.children.length - 1; i++) {
-		source.children[i] = new ConcatSource(source.children[i], ",\n");
+		source.children[i] = new ConcatSource(source.children[i], ',\n');
 	}
 
-	return new ConcatSource("{\n", source, "\n}\n");
+	return new ConcatSource('{\n', source, '\n}\n');
 };
 
 function createConfiguration(moduleName, options = {}) {
 
-	var modulePaths = [`./src/${moduleName}/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
+	var modulePaths = [`./src/module.js`, `./src/${moduleName}/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
 
 	if (options.modulePath) {
-		modulePaths.push(options.modulePath);
+		modulePaths = [options.modulePath];
 	}
 
 	var moduleEntry = modulePaths.filter(path => fs.existsSync(path))[0];
@@ -30,7 +29,7 @@ function createConfiguration(moduleName, options = {}) {
 
 	const context = path.resolve(moduleDir);
 	const entryPath = options.entryPath || context;
-
+	
 	var webpackConfig = {
 		entry: ['babel-regenerator-runtime', './' + path.basename(moduleEntry)],
 		context,
@@ -69,7 +68,7 @@ function createConfiguration(moduleName, options = {}) {
 							loader: 'babel-loader',
 							options: {
 								presets: ['@babel/preset-env'],
-								plugins: ['angularjs-annotate', '@babel/plugin-transform-regenerator', '@babel/plugin-proposal-object-rest-spread']
+								plugins: ['angularjs-annotate', '@babel/plugin-transform-regenerator', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
 							}
 						}
 					]
