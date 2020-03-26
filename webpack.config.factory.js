@@ -18,7 +18,7 @@ var i18nPostLoader = function (source) {
 
 function createConfiguration(moduleName, options = {}) {
 
-	var modulePaths = [`./src/module.js`, `./src/${moduleName}/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
+	var modulePaths = [`./src/module.js`,  `./src/${moduleName}/module.js`, `./src/modules/${moduleName}/src/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
 
 	if (options.modulePath) {
 		modulePaths = [options.modulePath];
@@ -61,13 +61,13 @@ function createConfiguration(moduleName, options = {}) {
 					]
 				},
 				{
-					test: /\.js$/,
+					test: /(\.js|\.ts)$/,
 					exclude: /(node_modules|bower_components)/,
 					use: [
 						{
 							loader: 'babel-loader',
 							options: {
-								presets: ['@babel/preset-env'],
+								presets: ['@babel/preset-env', '@babel/preset-typescript'],
 								plugins: ['angularjs-annotate', '@babel/plugin-transform-regenerator', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
 							}
 						}
@@ -98,7 +98,8 @@ function createConfiguration(moduleName, options = {}) {
 			],
 			alias: {
 				'shared': path.join(__dirname, '../shared/src')
-			}
+			},
+			extensions: ['.js', '.jsx', '.ts', '.tsx']
 		},
 		resolveLoader: {
 			modules: [
