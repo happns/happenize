@@ -31,6 +31,8 @@ function createConfiguration(moduleName, options = {}) {
 	const entryPath = options.entryPath || context;
 	
 	var webpackConfig = {
+		// mode: 'none',
+		devtool: 'source-map',
 		entry: ['babel-regenerator-runtime', './' + path.basename(moduleEntry)],
 		context,
 		output: {
