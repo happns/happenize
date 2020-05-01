@@ -15,7 +15,7 @@ module.exports = function(content, handler) {
         var itemPath = this.context.replace(entryPath, '');
         var itemPathArray = itemPath.split(path.sep);
  
-        var namespace = itemPathArray.filter(x => ignored.indexOf(x) < 0).join('.');
+        var namespace = (options.prefix || '') + itemPathArray.filter(x => ignored.indexOf(x) < 0).join('.');
         var itemCollectionName = itemPathArray[itemPathArray.length - 2];
         var isRootComponent = itemPathArray.length === 2 && itemCollectionName === 'components';
 
