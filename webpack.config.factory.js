@@ -38,6 +38,7 @@ function createConfiguration(moduleName, options = {}) {
 		entry: ['./' + path.basename(moduleEntry)],
 		context,
 		output: {
+			devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
 			filename: `${moduleName}.js`,
 		},
 		module: {
