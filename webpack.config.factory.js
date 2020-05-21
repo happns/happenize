@@ -5,6 +5,8 @@ var AutoGenerateIndexPlugin = require('./web_modules/autoGenerateIndex.webpack-p
 
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 var ConcatSource = require('webpack-sources').ConcatSource;
 
@@ -32,8 +34,8 @@ function createConfiguration(moduleName, options = {}) {
 	
 	var webpackConfig = {
 		// mode: 'none',
-		devtool: 'source-map',
-		entry: ['babel-regenerator-runtime', './' + path.basename(moduleEntry)],
+		devtool: 'cheap-module-source-map',
+		entry: ['./' + path.basename(moduleEntry)],
 		context,
 		output: {
 			filename: `${moduleName}.js`,
@@ -69,8 +71,13 @@ function createConfiguration(moduleName, options = {}) {
 						{
 							loader: 'babel-loader',
 							options: {
-								presets: ['@babel/preset-env', '@babel/preset-typescript'],
-								plugins: ['angularjs-annotate', '@babel/plugin-transform-regenerator', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
+								presets: [
+									['@babel/preset-env', {
+										'targets': {
+											'chrome': '58'
+										}
+									}], '@babel/preset-typescript'],
+								plugins: ['angularjs-annotate', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
 							}
 						}
 					]
@@ -120,7 +127,9 @@ function createConfiguration(moduleName, options = {}) {
 			}),
 			new CopyPlugin([
 				{ from: '../assets', to: 'assets' },
-			])
+			]),
+			new ErrorOverlayPlugin(),
+			new FriendlyErrorsWebpackPlugin()
 		],
 		optimization: {
 			minimize: false
