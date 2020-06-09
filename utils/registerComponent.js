@@ -38,7 +38,7 @@ export default function (component, ns) {
                 angular.extend(locals, $state.$current.locals.globals);
             }
 
-            $controller(controller, locals);
+            return $controller(controller, locals);
         }
     };
 
