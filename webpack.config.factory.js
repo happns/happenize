@@ -20,7 +20,7 @@ var i18nPostLoader = function (source) {
 
 function createConfiguration(moduleName, options = {}) {
 
-	var modulePaths = [`./src/module.js`,  `./src/${moduleName}/module.js`, `./src/modules/${moduleName}/src/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
+	var modulePaths = [`./src/module.js`, `./src/${moduleName}/module.js`, `./src/modules/${moduleName}/src/module.js`, `./src/modules/${moduleName}/module.js`, `./src/${moduleName}/${moduleName}.module.js`]
 
 	if (options.modulePath) {
 		modulePaths = [options.modulePath];
@@ -31,7 +31,7 @@ function createConfiguration(moduleName, options = {}) {
 
 	const context = path.resolve(moduleDir);
 	const entryPath = options.entryPath || context;
-	
+
 	var webpackConfig = {
 		// mode: 'none',
 		devtool: 'cheap-module-source-map',
@@ -45,7 +45,7 @@ function createConfiguration(moduleName, options = {}) {
 			rules: [
 				{
 					test: /\.less$/,
-					use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader', 
+					use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader',
 					{
 						loader: 'less-namespace.webpack-loader',
 						options: { entryPath }
@@ -78,7 +78,7 @@ function createConfiguration(moduleName, options = {}) {
 											'chrome': '58'
 										}
 									}], '@babel/preset-typescript'],
-								plugins: ['angularjs-annotate', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties']
+								plugins: ['angularjs-annotate', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining']
 							}
 						}
 					]
@@ -126,9 +126,6 @@ function createConfiguration(moduleName, options = {}) {
 				filename: `${moduleName}.css`,
 				chunkFilename: `${moduleName}.[id].css`,
 			}),
-			new CopyPlugin([
-				{ from: '../assets', to: 'assets' },
-			]),
 			new ErrorOverlayPlugin(),
 			new FriendlyErrorsWebpackPlugin()
 		],
@@ -136,6 +133,14 @@ function createConfiguration(moduleName, options = {}) {
 			minimize: false
 		}
 	};
+
+	const assetsPath = `${moduleDir}/assets`;
+	if (fs.existsSync(assetsPath)) {
+		webpackConfig.plugins.push(
+			new CopyPlugin([
+				{ from: assetsPath, to: 'assets' },
+			]));
+	}
 
 	return webpackConfig;
 }
