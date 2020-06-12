@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-const exclude = ['__tests__'];
+const exclude = ['__tests__', '.worker.ts'];
 
 module.exports = function(content) {
 	this.cacheable();
