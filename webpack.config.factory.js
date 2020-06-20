@@ -134,7 +134,7 @@ function createConfiguration(moduleName, options = {}) {
 		}
 	};
 
-	const assetsPath = `${moduleDir}/assets`;
+	const assetsPath = `${moduleDir}/../assets`;
 	if (fs.existsSync(assetsPath)) {
 		webpackConfig.plugins.push(
 			new CopyPlugin([
