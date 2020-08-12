@@ -33,11 +33,12 @@ function createConfiguration(moduleName, options = {}) {
 	const entryPath = options.entryPath || context;
 
 	var webpackConfig = {
-		// mode: 'none',
+		mode: 'production',
 		devtool: 'cheap-module-source-map',
 		entry: ['./' + path.basename(moduleEntry)],
 		context,
 		output: {
+			globalObject: 'globalThis',
 			devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
 			filename: `${moduleName}.js`,
 		},
@@ -140,6 +141,19 @@ function createConfiguration(moduleName, options = {}) {
 			new CopyPlugin([
 				{ from: assetsPath, to: 'assets' },
 			]));
+	}
+
+	if (process.env.NODE_ENV === 'production') {
+		const TerserPlugin = require('terser-webpack-plugin');
+
+		webpackConfig.optimization = {
+			minimize: true,
+			minimizer: [new TerserPlugin({
+				terserOptions: {
+					mangle: false
+				}
+			})]
+		};
 	}
 
 	return webpackConfig;
