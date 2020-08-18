@@ -8,9 +8,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
-var ConcatSource = require('webpack-sources').ConcatSource;
+const ConcatSource = require('webpack-sources').ConcatSource;
 
-var i18nPostLoader = function (source) {
+const i18nPostLoader = function (source) {
 	for (var i = 0; i < source.children.length - 1; i++) {
 		source.children[i] = new ConcatSource(source.children[i], ',\n');
 	}
@@ -160,5 +160,6 @@ function createConfiguration(moduleName, options = {}) {
 }
 
 createConfiguration.require = require;
+createConfiguration.i18nPostLoader = i18nPostLoader;
 
 module.exports = createConfiguration;
