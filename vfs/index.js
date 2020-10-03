@@ -6,26 +6,13 @@ Object.assign(context, { fs });
 const getHandlerMatchByPath = require('./getHandlerMatchByPath');
 
 const proxify = require('./proxify');
+const  { promisify } = require('util');
 
 const files = require('./files');
 
+const stat = require('./fn/stat');
 const watch = require('./fn/watch');
 const readdir = require('./fn/readdir');
-
-async function stat(path) {
-
-    const handlerMatch = getHandlerMatchByPath(path, { fs });
-
-    if (handlerMatch) {
-        const stats = new fs.Stats();
-        stats.mode = 33206;
-
-        files[path] = files[path] || {};
-        files[path].stats = stats;
-
-        return stats;
-    }
-}
 
 function readFileSync(fileName, encoding) {
 
@@ -44,6 +31,7 @@ function readFileSync(fileName, encoding) {
 }
 
 const vfs = proxify(fs, {
+    stat,
     watch,
     readdir,
 
@@ -57,21 +45,9 @@ const vfs = proxify(fs, {
         return fs.readFileSync.apply(this, arguments);
     },
 
-    stat: function (path, options = undefined, callback) {
-        stat(path)
-        .then(stats => {
-
-            if (stats) {
-                return callback(stats);
-            }
-
-            fs.stat.apply(this, arguments);
-        });        
-    },
-
     promises: proxify(fs.promises, {
         stat: async function (fileName) {
-            const vfsStatResult = await stat(fileName);
+            const vfsStatResult = await promisify(stat)(fileName);
 
             if (vfsStatResult) {
                 return vfsStatResult;

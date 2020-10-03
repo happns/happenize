@@ -28,9 +28,29 @@ it('should trigger listener when alias file changes', async () => {
 
     touch(testFile);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     expect(listener).toHaveBeenCalled();
 
     watcher.close();
+});
+
+it('should save the listener in watcherListeners', async () => {
+    const watcherListeners = require('../../watchListeners');
+
+    const testDir = path.join(__dirname, '__mocks__')
+    const testFile = path.join(testDir, 'test-file.html');
+    const alias = testFile + '.vnode';
+
+    aliases[alias] = testFile;
+
+    const listener = jest.fn();
+
+    const watcher = vfs.watch(testDir, {}, listener);
+
+    expect(watcherListeners[testDir].size).toBe(1);
+    
+    watcher.close();
+
+    expect(watcherListeners[testDir].size).toBe(0);
 });

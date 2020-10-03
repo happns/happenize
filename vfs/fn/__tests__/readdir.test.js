@@ -15,7 +15,7 @@ it('should return the aliased files', async () => {
 
     vfs.readdir(testDir, {}, callback);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     expect(callback).toHaveBeenCalledWith(null, ['test-file.html', 'test-file.html.vnode']);
 });
