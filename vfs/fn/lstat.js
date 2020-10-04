@@ -2,6 +2,6 @@ const context = require('../context');
 
 const fs = { ...context.fs };
 
-const stat = require('./hn/stat');
+const lstat = require('./hn/lstat');
 
-module.exports = stat({ fs });
+module.exports = lstat({ fs });

@@ -11,6 +11,7 @@ const  { promisify } = require('util');
 const files = require('./files');
 
 const stat = require('./fn/stat');
+const lstat = require('./fn/lstat');
 const watch = require('./fn/watch');
 const readdir = require('./fn/readdir');
 
@@ -27,11 +28,27 @@ function readFileSync(fileName, encoding) {
 
         return content;
     }
-
 }
 
 const vfs = proxify(fs, {
+    $vfs: true,
+
+    connectHardLinksToFs: () => {
+        const backupFs = { ...fs }
+
+        fs.readdir = readdir;
+        fs.stat = stat;
+        fs.lstat = lstat;
+
+        return () => {
+            fs.readdir = backupFs.readdir;
+            fs.stat = backupFs.stat;
+            fs.lstat = backupFs.lstat;
+        }
+    },
+
     stat,
+    lstat,
     watch,
     readdir,
 
