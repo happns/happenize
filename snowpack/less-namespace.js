@@ -15,9 +15,12 @@ const render = async (filepath, options, entryPath) => {
                     entryPath: entryPath || path.join(process.cwd(), 'src')
                 });
 
-                const { namespace, nsToDirectiveTagName } = solvedNamespace;
+                if (solvedNamespace) {
+                    const { namespace, nsToDirectiveTagName } = solvedNamespace;
 
-                data = `[_c_${nsToDirectiveTagName(namespace)}] { ${data} }`
+                    data = `[_c_${nsToDirectiveTagName(namespace)}] { ${data} }`;
+                }
+
                 compiler.render(data, { ...options, filename: filepath }, (err, result) => {
                     if (err) {
                         reject(err);
