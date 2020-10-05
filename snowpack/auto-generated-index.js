@@ -24,9 +24,9 @@ module.exports = function (snowpackConfig, pluginOptions) {
                     return files.map(fileName => {
                         // HACK snowpack handles .html files on it's own without passing it to loader plugin
                         // it serves those files from public and this makes it not possible to loaded them from the src/
-                        if (fileName.slice(-5) === '.html') {
-                            return fileName + '.vnode';
-                        }
+                        // if (fileName.slice(-5) === '.html') {
+                        //     return fileName + '.vnode';
+                        // }
 
                         return fileName;
                     })

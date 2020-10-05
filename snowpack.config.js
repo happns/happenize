@@ -9,6 +9,6 @@ module.exports = {
   plugins: [
     __dirname + '/snowpack/auto-generated-index.js', 
     __dirname + '/snowpack/html-namespace.js',
-    'snowpack-plugin-less'
+    __dirname + '/snowpack/less-namespace.js'
   ]
 };

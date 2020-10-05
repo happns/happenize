@@ -1,10 +1,13 @@
-const { sep } = require('path');
+
+const { sep, resolve } = require('path');
 
 module.exports = function ({ path, entryPath, prefix }) {
     const ignored = ['', 'shared', 'partials', 'components', 'dialogs', 'bottomSheets'];
 
     entryPath = Array.isArray(entryPath) ? entryPath : [entryPath];
-    entryPath = entryPath.filter(entryPath => path.indexOf(entryPath) !== -1)[0];
+    entryPath = entryPath
+    .map(entryPath => resolve(entryPath))
+    .filter(entryPath => path.indexOf(entryPath) !== -1)[0];
 
     if (entryPath) {
         const itemPath = path.replace(entryPath, '');
