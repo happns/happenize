@@ -23,7 +23,7 @@ module.exports = function ({ path }, { ls } = {}) {
 
     for (var module of modules) {
         const [, ext] = module.file.match(/(\.[^.]+)$/) || [];
-        if (['.less'].indexOf(ext) !== -1) {
+        if (['.less', '.css'].indexOf(ext) !== -1) {
             src += `import './${module.file}';\n`
 
             continue;
