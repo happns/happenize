@@ -6,7 +6,7 @@ module.exports = function(content) {
 	this.addContextDependency(this.context);
 
 	if (content.indexOf("'auto-generate'") !== -1) {
-		return generateIndexForDirectory(this.content);
+		return generateIndexForDirectory({ path: this.content });
 	}
 	
 	return content;
