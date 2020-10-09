@@ -1,8 +1,8 @@
-const template = require('../templates/template.html.js');
-const vfsHandlers = require('../vfs/handlers');
-
 const fs = require('fs');
 const path = require('path');
+
+const template = require('../templates/template.html.js');
+const vfsHandlers = require('../vfs/handlers');
 
 const pathToNamespace = require('../pack/pathToNamespace.js');
 

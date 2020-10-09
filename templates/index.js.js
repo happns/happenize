@@ -2,8 +2,9 @@ const fs = require('fs');
 
 const exclude = ['__tests__', '.worker.ts'];
 
-module.exports = function ({ path }, { ls } = {}) {
-    var contents = fs.readdirSync(path).filter(x => x !== 'index.js');
+module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } = {}) {
+    var listing = fs.readdirSync(path);
+    var contents = listing.filter(x => x !== 'index.js');
 
     if (ls) {
         contents = ls(contents);
@@ -23,7 +24,7 @@ module.exports = function ({ path }, { ls } = {}) {
 
     for (var module of modules) {
         const [, ext] = module.file.match(/(\.[^.]+)$/) || [];
-        if (['.less', '.css'].indexOf(ext) !== -1) {
+        if (justImportExt.indexOf(ext) !== -1) {
             src += `import './${module.file}';\n`
 
             continue;
