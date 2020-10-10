@@ -2,7 +2,10 @@ const path = require('path');
 const files = require('../../files');
 const aliases = require('../../aliases');
 
-module.exports = ({ fs }) => function (dir, options = undefined, callback) {
+module.exports = ({ fs }) => function (...args) {
+    const callback = args.pop();
+    const [dir, options = {}] = args;
+
     const vfsFilesInDir = Object.keys(files).concat(Object.keys(aliases))
         .filter(fileName => fileName.indexOf(dir) !== -1)
         .map(fileName => fileName.replace(dir + path.sep, ''))

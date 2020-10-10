@@ -5,7 +5,7 @@ export default function (component, ns) {
     //component.replace = component.replace || true;
 
     function loadObjectFromNamespace(obj, ns) {
-        return ns.split('.').reduce((o,i)=> o[i] = o[i] || {}, obj)
+        return ns.split('.').reduce((o, i) => o[i] = o[i] || {}, obj)
     }
 
     component.controller = function ($rootScope, $scope, $controller, $injector) {
@@ -42,18 +42,27 @@ export default function (component, ns) {
         }
     };
 
-    component.link = function (scope, element, attrs) {
-        const camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-        const nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');
+    component.link = {
+        pre: component.link?.pre,
+        post: function (scope, element, attrs) {
+            const camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+            const nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');
 
-        const tagName = nsToDirectiveTagName(ns);
+            const tagName = nsToDirectiveTagName(ns);
 
-        element.attr(`_c_${tagName}`, '');
+            element.attr(`_c_${tagName}`, '');
 
-        if (link) {
-            link.apply(this, arguments);
+            if (link && typeof link === 'function') {
+                link.apply(this, arguments);
+            }
+
+            if (link?.post) {
+                link.post.apply(this, arguments);
+            }
         }
     };
+
+    component.ns = ns;
 
     return component;
 };

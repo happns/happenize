@@ -7,6 +7,7 @@ const vfsHandlers = require('../vfs/handlers');
 const pathToNamespace = require('../pack/pathToNamespace.js');
 
 const aliases = require('../vfs/aliases');
+const { indexOf } = require('../vfs/handlers');
 
 const render = function (filePath, { fs, entryPath }) {
 	const fileContents = fs.readFileSync(filePath, 'utf-8');
@@ -38,14 +39,15 @@ module.exports = function (snowpackConfig, pluginOptions) {
 		test: (fileName, { fs }) => {
 
 			const match = fileName.match(/(.+)\.html(\.vnode)*(\.js)?$/);
-
 			if (match) {
 				const htmlFileName = fileName
-					.replace(/\.vnode(\.js)?/g, '')
-					.replace(`${path.sep}public${path.sep}_dist_${path.sep}`, `${path.sep}src${path.sep}`);
+					.replace(/\.vnode(\.js)?/g, '');
+				//.replace(`${path.sep}public${path.sep}_dist_${path.sep}`, `${path.sep}src${path.sep}`);
 
 				if (fs.existsSync(htmlFileName)) {
-					aliases[fileName] = htmlFileName;
+					if (fileName !== htmlFileName) {
+						aliases[fileName] = htmlFileName;
+					}
 
 					return match;
 				}
@@ -53,7 +55,7 @@ module.exports = function (snowpackConfig, pluginOptions) {
 		},
 
 		load: (fileName, { fs, match }) => {
-			const htmlFileName = aliases[fileName];
+			const htmlFileName = aliases[fileName] || fileName;
 			const content = render(htmlFileName, { fs, entryPath: snowpackConfig.entryPaths });
 
 			if (fileName.slice(-6) === '.vnode') {

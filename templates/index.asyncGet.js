@@ -31,21 +31,11 @@ module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } =
         }
 
         toExport.push(module);
-
-        src += `import ${module.name} from './${module.file}';\n`
     }
 
-    src += `
-import HMR from 'happenize/snowpack/hmr.js';
+    const getter = module => `get ${module.name}() { return import('./${module.file}').then(module => module.default); }`;
 
-const component = { ${toExport.map(x => x.name).join(', ')} };
-
-if (import.meta.hot) {
-    HMR.applyToComponent(import.meta, component);
-}
-
-export default component;
-`;
+    src += `export default { ${toExport.map(module => getter(module)).join(',\n')} };\n`
 
     return src;
 }

@@ -5,7 +5,14 @@ const getHandlerMatchByPath = require('../../getHandlerMatchByPath');
 
 const DEVICE_ID = 0;
 
-module.exports = ({ fs }) => function (path, callback) {
+module.exports = ({ fs }) => function (...args) {
+    const callback = args.pop();
+    const [path, options = {}] = args;
+
+    if (typeof callback !== 'function') {
+        throw new Error('Requires callback to be a function, got ' + callback);
+    }
+
     try {
         if (aliases[path]) {
             fs.promises.lstat(aliases[path])
@@ -34,10 +41,6 @@ module.exports = ({ fs }) => function (path, callback) {
             }
 
             return stats;
-        }
-
-        if (!callback) {
-            return;
         }
 
         return fs.lstat.apply(this, arguments);

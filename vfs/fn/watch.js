@@ -5,11 +5,12 @@ const aliases = require('../aliases');
 const watchListeners = require('../watchListeners');
 
 module.exports = function (path, options = undefined, listener) {
+    let watcher;
     if (aliases[path]) {
-        path = aliases[path];
+        watcher = fs.watch.call(this, aliases[path], options, (eventType) => listener(eventType, path));
+    } else {
+        watcher = fs.watch.call(this, path, options, listener);
     }
-
-    const watcher = fs.watch.call(this, path, options, listener);
 
     watchListeners[path] = watchListeners[path] || new Set();
 
