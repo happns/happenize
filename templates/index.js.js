@@ -38,13 +38,13 @@ module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } =
     src += `
 import HMR from 'happenize/snowpack/hmr.js';
 
-const component = { ${toExport.map(x => x.name).join(', ')} };
+const _component_ = { ${toExport.map(x => x.name).join(', ')} };
 
-if (import.meta.hot) {
-    HMR.applyToComponent(import.meta, component);
+if (import.meta.hot && typeof template !== 'undefined') {
+    HMR.applyToComponent(import.meta, _component_);
 }
 
-export default component;
+export default _component_;
 `;
 
     return src;

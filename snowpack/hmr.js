@@ -37,7 +37,18 @@ const HMR = {
 
                         Object.assign(component, module.default);
 
-                        $element.replaceWith($element = $pristineElement.cloneNode());
+                        if (component.replace) {
+                            const $replacement = $pristineElement.cloneNode();
+                            $replacement.innerHTML = component.template;
+
+                            $element.replaceWith($element = $replacement.firstChild);
+                        } else {
+                            $element.replaceWith($element = $pristineElement.cloneNode());
+                            $element.innerHTML = component.template;
+                        }
+
+                        const toTagName = input => input.replace(/\./g, '_');
+                        $element.setAttribute(`_c_${toTagName(component.ns)}`, '');
 
                         $$compile($element)($scope);
                     });

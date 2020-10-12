@@ -4,10 +4,16 @@ const { fs } = require('../context');
 const aliases = require('../aliases');
 const watchListeners = require('../watchListeners');
 
-module.exports = function (path, options = undefined, listener) {
+module.exports = function (...args) {
+    let listener = args.pop();
+    const [path, options = {}] = args;
+
     let watcher;
     if (aliases[path]) {
-        watcher = fs.watch.call(this, aliases[path], options, (eventType) => listener(eventType, path));
+        const targetListener = listener;
+        listener = (eventType) => targetListener(eventType, path);
+
+        watcher = fs.watch.call(this, aliases[path], options, listener);
     } else {
         watcher = fs.watch.call(this, path, options, listener);
     }

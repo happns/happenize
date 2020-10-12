@@ -19,7 +19,7 @@ const generateIndexForDirectory = function ({ snowpackConfig, path }) {
     return templates.default.apply(templates, arguments);
 }
 
-module.exports = function (snowpackConfig, pluginOptions) {
+module.exports = function (snowpackConfig) {
     vfsHandlers.push({
         test: (fileName, { fs }) => {
             const match = fileName.match(/(.+)index\.ts$/);

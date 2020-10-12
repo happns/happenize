@@ -7,7 +7,8 @@ const vfsHandlers = require('../vfs/handlers');
 const pathToNamespace = require('../pack/pathToNamespace.js');
 
 const aliases = require('../vfs/aliases');
-const { indexOf } = require('../vfs/handlers');
+
+const containsEntryPath = require('../pack/containsEntryPath');
 
 const render = function (filePath, { fs, entryPath }) {
 	const fileContents = fs.readFileSync(filePath, 'utf-8');
@@ -27,34 +28,38 @@ const render = function (filePath, { fs, entryPath }) {
 		// replace the current namespace sign (i.e. ':') to the current namespace (with dashed instead of camelCase)
 		.replace(/(<):|(<\/):/g, `$1$2${camelCaseToDashes(namespace)}.`)
 		// handle .. (go up)
-		.replace(/[^\.]+\.{3}/g, '')
+		.replace(/[^.]+\.{3}/g, '')
 		// replace all dots in the namespace '.' to underscores '_' so it could be handled by CSS/LESS
 		.replace(/(<\/?)([^\s>]+)/g, x => x.replace(/\./g, '_'))
 		.replace(/translate=":/g, `translate="${namespace}.`)
 		.replace(/\{\{\s*(\(\s*)*(['"]):/g, `{{$1$2${namespace}.`);
 }
 
-module.exports = function (snowpackConfig, pluginOptions) {
+module.exports = function (snowpackConfig) {
 	vfsHandlers.push({
 		test: (fileName, { fs }) => {
+			const sanitizedFileName = fileName.indexOf('.vnode') !== -1 ? fileName : fileName.replace(`${path.sep}public${path.sep}_dist_${path.sep}`, `${path.sep}src${path.sep}`);
+			const entryPath = containsEntryPath(sanitizedFileName, snowpackConfig.entryPaths);
 
-			const match = fileName.match(/(.+)\.html(\.vnode)*(\.js)?$/);
-			if (match) {
-				const htmlFileName = fileName
-					.replace(/\.vnode(\.js)?/g, '');
-				//.replace(`${path.sep}public${path.sep}_dist_${path.sep}`, `${path.sep}src${path.sep}`);
+			if (entryPath) {
+				const match = fileName.match(/(.+)\.html(\.vnode)*(\.js)?$/);
 
-				if (fs.existsSync(htmlFileName)) {
-					if (fileName !== htmlFileName) {
-						aliases[fileName] = htmlFileName;
+				if (match) {
+					const htmlFileName = sanitizedFileName
+						.replace(/\.vnode(\.js)?/g, '')
+
+					if (fs.existsSync(htmlFileName)) {
+						if (fileName !== htmlFileName) {
+							aliases[fileName] = htmlFileName;
+						}
+
+						return match;
 					}
-
-					return match;
 				}
 			}
 		},
 
-		load: (fileName, { fs, match }) => {
+		load: (fileName, { fs }) => {
 			const htmlFileName = aliases[fileName] || fileName;
 			const content = render(htmlFileName, { fs, entryPath: snowpackConfig.entryPaths });
 
@@ -62,7 +67,7 @@ module.exports = function (snowpackConfig, pluginOptions) {
 				return template(content);
 			}
 
-			if (!content.toString().match(/\<head(\s|\/|>)/)) {
+			if (!content.toString().match(/<head(\s|\/|>)/)) {
 				return `export default ${JSON.stringify(content.toString())}` + '/* <head></head> */';
 			}
 
