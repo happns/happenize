@@ -1,4 +1,3 @@
-
 const { sep } = require('path');
 const containsEntryPath = require('./containsEntryPath');
 
@@ -14,6 +13,10 @@ module.exports = function ({ path, entryPath, prefix }) {
         const namespace = (prefix || '') + itemPathArray.filter(x => ignored.indexOf(x) < 0).join('.');
         const itemCollectionName = itemPathArray[itemPathArray.length - 2];
         const isRootComponent = itemPathArray.length === 2 && itemCollectionName === 'components';
+
+        if (namespace.indexOf('assets.') === 0) {
+            return;
+        }
 
         const camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
         const nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');

@@ -1,7 +1,7 @@
 const $path = require('path');
 
 const templates = {
-    default: require('../templates/index.js'),
+    default: require('../templates/index.snowpack.js'),
     asyncGet: require('../templates/index.asyncGet')
 };
 

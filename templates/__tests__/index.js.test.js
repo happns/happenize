@@ -1,4 +1,4 @@
-const generateIndexForDirectory = require('../index.js.js');
+const generateIndexForDirectory = require('../index.snowpack.js');
 
 it('should generate the index js file for a given directory', () => {
 

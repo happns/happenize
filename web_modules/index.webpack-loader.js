@@ -1,5 +1,4 @@
-var fs = require('fs');
-const generateIndexForDirectory = require('../templates/index.js');
+const generateIndexForDirectory = require('../templates/index.webpack.js');
 
 module.exports = function (content) {
 	this.cacheable();
