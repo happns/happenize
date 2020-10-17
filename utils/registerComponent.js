@@ -35,7 +35,23 @@ export default function (component, ns) {
         if (controller) {
             var locals = { $scope, $namespace: ns };
             if ($state) {
-                angular.extend(locals, $state.$current.locals.globals);
+                function resolveGlobals() {
+                    if ($state.$current.locals?.globals) {
+                        return $state.$current.locals.globals;
+                    }
+
+                    const globals = {};
+                    const resolvables = $state.getCurrentPath().flatMap(x => x.resolvables)
+                    for (let resolvable of resolvables) {
+                        if (typeof resolvable.token === 'string') {
+                            globals[resolvable.token] = resolvable.data;
+                        }
+                    }
+                }
+
+                const globals = resolveGlobals($state.transition);
+
+                angular.extend(locals, globals);
             }
 
             return $controller(controller, locals);
