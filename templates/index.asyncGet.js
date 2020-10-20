@@ -10,7 +10,7 @@ module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } =
         contents = ls(contents);
     }
 
-    var src = '';
+    var src = `import registerPartials from 'happenize/utils/registerPartials';\n`;
 
     var modules = contents
         .filter(fileName => fileName[0] !== '.' && !exclude.some(x => fileName.indexOf(x) !== -1))
@@ -33,7 +33,20 @@ module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } =
         toExport.push(module);
     }
 
-    const getter = module => `get ${module.name}() { return import('./${module.file}').then(module => module.default); }`;
+    const getter = module => `
+get ${module.name}() { 
+    if (!this._${module.name}) {
+
+        return this._${module.name} = import('./${module.file}')
+            .then(module => module.default)
+            .then(module => {
+                this._${module.name} = module;
+                registerPartials({ ${module.name}: module });
+            });
+    }
+
+    return this._${module.name};
+}`;
 
     src += `export default { ${toExport.map(module => getter(module)).join(',\n')} };\n`
 

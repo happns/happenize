@@ -128,7 +128,7 @@ function createConfiguration(moduleName, options = {}) {
 				filename: `${moduleName}.css`,
 				chunkFilename: `${moduleName}.[id].css`,
 			}),
-			new ErrorOverlayPlugin(),
+			// new ErrorOverlayPlugin(),
 			new FriendlyErrorsWebpackPlugin()
 		],
 		optimization: {

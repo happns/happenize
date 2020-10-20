@@ -55,7 +55,7 @@ const HMR = {
 
                     meta.hot.dispose(() => {
                         // Cleanup any side-effects. Optional.
-                        scope.$emit('$destroy');
+                        // scope.$emit('$destroy');
                     });
                 }
 

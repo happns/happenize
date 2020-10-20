@@ -4,7 +4,7 @@ module.exports = function ({ workerFileName }) {
 
 export default class WorkerProxy {
     constructor() {
-        this.worker = new Worker('${workerFileName}', { type: 'module' });
+        this.worker = new Worker('${workerFileName.replace('.ts', '.js')}', { type: 'module' });
         this.wrappedWorker = wrap(this.worker);
 
         return this.wrappedWorker;

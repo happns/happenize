@@ -36,7 +36,7 @@ export default function (component, ns) {
             var locals = { $scope, $namespace: ns };
             if ($state) {
                 function resolveGlobals() {
-                    if ($state.$current.locals?.globals) {
+                    if ($state.$current.locals) {
                         return $state.$current.locals.globals;
                     }
 
