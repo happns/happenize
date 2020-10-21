@@ -45,3 +45,7 @@ it('should handle readdirp data module with aliased files', async () => {
     expect(onData).toHaveBeenCalled();
     expect(onData.mock.calls.length).toBe(2);
 });
+
+it('should handle before hook', async () => {
+    throw new Error('not implemented');
+});

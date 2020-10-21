@@ -1,10 +1,13 @@
 const path = require('path');
 const files = require('../../files');
 const aliases = require('../../aliases');
+const { trigger } = require('../../hooks');
 
 module.exports = ({ fs }) => function (...args) {
     const callback = args.pop();
     const [dir, options = {}] = args;
+
+    trigger('before', 'readdir', { fs }, dir, options, callback);
 
     const vfsFilesInDir = Object.keys(files).concat(Object.keys(aliases))
         .filter(fileName => fileName.indexOf(dir) !== -1)
