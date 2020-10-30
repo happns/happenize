@@ -24,7 +24,15 @@ const generateIndexForDirectory = function ({ snowpackConfig, path }) {
 }
 
 module.exports = function (snowpackConfig) {
+    const handledDirectories = new Set();
+
     before('readdir', ({ fs }, dir) => {
+        if (handledDirectories.has(dir)) {
+            return;
+        }
+
+        handledDirectories.add(dir);
+
         const files = fs.readdirSync(dir);
 
         const entryPath = containsEntryPath(dir, snowpackConfig.entryPaths);

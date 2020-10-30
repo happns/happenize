@@ -40,15 +40,18 @@ get ${module.name}() {
         return this._${module.name} = import('./${module.file}')
             .then(module => module.default)
             .then(module => {
+                module.name = '${module.name}';
                 this._${module.name} = module;
                 registerPartials({ ${module.name}: module });
+
+                return module;
             });
     }
 
     return this._${module.name};
 }`;
 
-    src += `export default { ${toExport.map(module => getter(module)).join(',\n')} };\n`
+    src += `export default { async: true, ${toExport.map(module => getter(module)).join(',\n')} };\n`
 
     return src;
 }

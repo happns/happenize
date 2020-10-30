@@ -37,7 +37,15 @@ const render = function (filePath, { fs, entryPath }) {
 }
 
 module.exports = function (snowpackConfig) {
+	const handledDirectories = new Set();
+
 	before('readdir', ({ fs }, dir) => {
+		if (handledDirectories.has(dir)) {
+			return;
+		}
+	
+		handledDirectories.add(dir);
+
         const files = fs.readdirSync(dir);
 
         files.forEach(file => {

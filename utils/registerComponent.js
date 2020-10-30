@@ -59,7 +59,7 @@ export default function (component, ns) {
     };
 
     component.link = {
-        pre: component.link?.pre,
+        pre: component.link ? component.link.pre : undefined,
         post: function (scope, element, attrs) {
             const camelCaseToDashes = input => input.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
             const nsToDirectiveTagName = input => camelCaseToDashes(input).replace(/\./g, '_');

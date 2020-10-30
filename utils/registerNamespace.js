@@ -1,4 +1,8 @@
 export default function (components, func, ns) {
+	if (components.async) {
+		return;
+	}
+
 	var App = this && ((typeof (func) === 'string' && this[func]) || this.compileProvider) ? this : window.App;
 
 	ns = ns && `${ns}.` || '';
