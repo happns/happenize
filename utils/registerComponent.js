@@ -72,7 +72,7 @@ export default function (component, ns) {
                 link.apply(this, arguments);
             }
 
-            if (link?.post) {
+            if (link && link.post) {
                 link.post.apply(this, arguments);
             }
         }
