@@ -80,7 +80,7 @@ function createConfiguration(moduleName, options = {}) {
 											'chrome': '58'
 										}
 									}], '@babel/preset-typescript'],
-								plugins: ['angularjs-annotate', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining']
+								plugins: ['angularjs-annotate', '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-nullish-coalescing-operator']
 							}
 						}
 					]
