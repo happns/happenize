@@ -46,15 +46,31 @@ function createConfiguration(moduleName, options = {}) {
 			rules: [
 				{
 					test: /\.less$/,
-					use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader',
-					{
-						loader: 'less-namespace.webpack-loader',
-						options: { entryPath }
-					}]
+					use: [
+						MiniCssExtractPlugin.loader,
+						{
+							loader: 'css-loader',
+							options: {
+								url: false
+							}
+						},
+						'less-loader',
+						{
+							loader: 'less-namespace.webpack-loader',
+							options: { entryPath }
+						}]
 				},
 				{
 					test: /\.css$/,
-					use: [MiniCssExtractPlugin.loader, 'css-loader']
+					use: [
+						MiniCssExtractPlugin.loader,
+						{
+							loader: 'css-loader',
+							options: {
+								url: false
+							}
+						}
+					]
 				},
 				{
 					test: /\.html$/,
