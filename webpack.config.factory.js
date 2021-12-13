@@ -40,7 +40,7 @@ function createConfiguration(moduleName, options = {}) {
 		output: {
 			globalObject: 'globalThis',
 			devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
-			filename: `${moduleName}.js`,
+			filename: `[name].js`,
 		},
 		module: {
 			rules: [
@@ -141,8 +141,8 @@ function createConfiguration(moduleName, options = {}) {
 			new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
-				filename: `${moduleName}.css`,
-				chunkFilename: `${moduleName}.[id].css`,
+				filename: `[name].css`,
+				chunkFilename: `[name].[id].css`,
 			}),
 			// new ErrorOverlayPlugin(),
 			new FriendlyErrorsWebpackPlugin()
