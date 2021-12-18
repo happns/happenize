@@ -35,7 +35,9 @@ function createConfiguration(moduleName, options = {}) {
 	var webpackConfig = {
 		mode: 'production',
 		devtool: 'cheap-module-source-map',
-		entry: ['./' + path.basename(moduleEntry)],
+		entry: {
+			[moduleName]: './' + path.basename(moduleEntry)
+		},
 		context,
 		output: {
 			globalObject: 'globalThis',
