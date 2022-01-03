@@ -154,6 +154,14 @@ function createConfiguration(moduleName, options = {}) {
 		}
 	};
 
+	let i;
+	if (i = __dirname.indexOf('/node_modules/') !== -1) {
+		// pnpm support
+		const p = __dirname.slice(0, i);
+
+		webpackConfig.resolveLoader.modules.push(path.join(p, 'node_modules'));
+	}
+
 	const assetsPath = `${moduleDir}/../assets`;
 	if (fs.existsSync(assetsPath)) {
 		webpackConfig.plugins.push(
