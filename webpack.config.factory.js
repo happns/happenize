@@ -154,12 +154,9 @@ function createConfiguration(moduleName, options = {}) {
 		}
 	};
 
-	let i;
-	if (i = __dirname.indexOf('/node_modules/') !== -1) {
+	if (__dirname.indexOf('/.pnpm/') !== -1) {
 		// pnpm support
-		const p = __dirname.slice(0, i);
-
-		webpackConfig.resolveLoader.modules.push(path.join(p, 'node_modules'));
+		webpackConfig.resolveLoader.modules.push(path.dirname(__dirname));
 	}
 
 	const assetsPath = `${moduleDir}/../assets`;
