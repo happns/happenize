@@ -10,7 +10,8 @@ module.exports = function ({ path }, { ls, justImportExt = ['.less', '.css'] } =
         contents = ls(contents);
     }
 
-    var src = `import registerPartials from 'happenize/utils/registerPartials';\n`;
+    var src = `import hmr from 'happenize/snowpack/hmr';
+import registerPartials from 'happenize/utils/registerPartials';\n`;
 
     var modules = contents
         .filter(fileName => fileName[0] !== '.' && !exclude.some(x => fileName.indexOf(x) !== -1))
@@ -42,7 +43,7 @@ get ${module.name}() {
             .then(module => {
                 module.name = '${module.name}';
                 this._${module.name} = module;
-                registerPartials({ ${module.name}: module });
+                registerPartials.bind(hmr.module)({ ${module.name}: module });
 
                 return module;
             });

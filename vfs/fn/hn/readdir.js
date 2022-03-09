@@ -11,7 +11,7 @@ module.exports = ({ fs }) => function (...args) {
 
     const vfsFilesInDir = Object.keys(files).concat(Object.keys(aliases))
         .filter(fileName => fileName.indexOf(dir) !== -1)
-        .map(fileName => fileName.replace(dir + path.sep, ''))
+        .map(fileName => fileName.replace(dir + path.sep, '').replace(dir, ''))
         .filter(fileName => fileName === path.basename(fileName));
 
     fs.promises.readdir(dir, options)

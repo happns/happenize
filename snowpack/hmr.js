@@ -1,5 +1,7 @@
 const HMR = {
     applyToModule: function (module) {
+        HMR.module = module;
+
         module.config(function ($compileProvider) {
             Object.assign(HMR, { $compileProvider });
         });

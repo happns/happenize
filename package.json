@@ -62,9 +62,9 @@
     "readdirp": "^3.4.0"
   },
   "peerDependencies": {
-    "snowpack": "^2.12.1"
+    "snowpack": "^3.8.8"
   },
   "bin": {
-    "happenize": "index.bin.js"
+    "happenize": "index.bin.mjs"
   }
 }

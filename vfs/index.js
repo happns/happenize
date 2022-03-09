@@ -13,10 +13,12 @@ const files = require('./files');
 const stat = require('./fn/stat');
 const lstat = require('./fn/lstat');
 const watch = require('./fn/watch');
+const watchFile = require('./fn/watchFile');
+const unwatchFile = require('./fn/unwatchFile');
 const readdir = require('./fn/readdir');
+const readdirSync = require('./fn/readdirSync');
 
 function readFileSync(fileName, encoding) {
-
     const handlerMatch = getHandlerMatchByPath(fileName, { fs });
 
     if (handlerMatch) {
@@ -26,7 +28,13 @@ function readFileSync(fileName, encoding) {
             throw new Error(`Handler for file '${fileName}' returned a promise for readFileSync`);
         }
 
-        return content;
+        if (encoding === 'utf8') {
+            return content;
+        } else if (!encoding) {
+            return Buffer.from(content);
+        } else {
+            throw new Error('Unsupported encoding ' + encoding);
+        }
     }
 }
 
@@ -37,11 +45,13 @@ const vfs = proxify(fs, {
         const backupFs = { ...fs }
 
         fs.readdir = readdir;
+        fs.readdirSync = readdirSync;
         fs.stat = stat;
         fs.lstat = lstat;
 
         return () => {
             fs.readdir = backupFs.readdir;
+            fs.readdirSync = backupFs.readdirSync;
             fs.stat = backupFs.stat;
             fs.lstat = backupFs.lstat;
         }
@@ -50,10 +60,14 @@ const vfs = proxify(fs, {
     stat,
     lstat,
     watch,
+    watchFile,
+    unwatchFile,
     readdir,
 
+    readdirSync,
+
     readFileSync: function (filePath, encoding) {
-        const content = readFileSync(filePath);
+        const content = readFileSync(filePath, encoding);
 
         if (content) {
             return content;
@@ -73,14 +87,16 @@ const vfs = proxify(fs, {
             return await fs.promises.stat.apply(this, arguments);
         },
 
-        readFile: async function (fileName) {
-            const content = readFileSync(fileName);
+        readFile: async function (fileName, encoding) {
+            const content = readFileSync(fileName, encoding);
 
             if (content) {
-                return Buffer.from(content);
+                return content;
             }
 
-            return await fs.promises.readFile.apply(this, arguments);
+            return await fs.promises.readFile.apply(this, arguments).catch(err => {
+                throw new Error(err);
+            });
         }
     })
 });

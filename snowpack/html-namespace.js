@@ -51,8 +51,8 @@ module.exports = function (snowpackConfig) {
         files.forEach(file => {
             const fileName = path.join(dir, file);
 
-            if (fileName.match(/\.html$/)) {
-				const alias = fileName + '.vnode.js';
+            if (fileName.match(/\.html$/) && fileName.indexOf('index.html') === -1) {
+				const alias = fileName + '.js';
 				aliases[alias] = fileName;
 			}
         });
@@ -68,7 +68,7 @@ module.exports = function (snowpackConfig) {
 
 				if (match) {
 					const htmlFileName = sanitizedFileName
-						.replace(/\.vnode(\.js)?/g, '')
+						.replace(/(\.vnode)?(\.js)?/g, '')
 
 					if (fs.existsSync(htmlFileName)) {
 						if (fileName !== htmlFileName) {
