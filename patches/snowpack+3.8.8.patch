@@ -1,0 +1,13 @@
+diff --git a/node_modules/snowpack/lib/cjs/build/file-urls.js b/node_modules/snowpack/lib/cjs/build/file-urls.js
+index 19a33fb..3827c65 100644
+--- a/node_modules/snowpack/lib/cjs/build/file-urls.js
++++ b/node_modules/snowpack/lib/cjs/build/file-urls.js
+@@ -52,7 +52,7 @@ function getMountEntryForFile(fileLoc, config) {
+     // PERF: Use `for...in` here instead of the slower `Object.entries()` method
+     // that we use everywhere else, since this function can get called 100s of
+     // times during a build.
+-    for (const mountKey in config.mount) {
++    for (const mountKey of Object.keys(config.mount)) {
+         if (!config.mount.hasOwnProperty(mountKey)) {
+             continue;
+         }

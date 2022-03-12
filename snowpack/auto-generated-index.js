@@ -33,7 +33,12 @@ module.exports = function (snowpackConfig) {
 
         handledDirectories.add(dir);
 
-        const files = fs.readdirSync(dir);
+        let files;
+        try {
+            files = fs.readdirSync(dir);
+        } catch(err) {
+            return;
+        }
 
         const entryPath = containsEntryPath(dir, snowpackConfig.entryPaths);
 

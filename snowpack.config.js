@@ -11,5 +11,8 @@ module.exports = {
   ],
   devOptions: {
     hmr: true
+  },
+  packageOptions: {
+    polyfillNode: true
   }
 };
