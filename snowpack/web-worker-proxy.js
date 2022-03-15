@@ -15,11 +15,6 @@ const toWorkerFileName = fileName => fileName
     .replace(/\.worker\.worker-proxy/, '.worker')
     .replace(`${path.sep}public${path.sep}_dist_${path.sep}`, `${path.sep}src${path.sep}`);
 
-const toWorkerImportFromName = fileName => '/_dist_/' + fileName
-    .replace(/\.worker\.worker-proxy/, '.worker')
-    .split(path.sep).join('/')
-    .split(`/_dist_/`)[1];
-
 module.exports = function (snowpackConfig, pluginOptions) {
     const handledDirectories = new Set();
 
@@ -80,7 +75,13 @@ module.exports = function (snowpackConfig, pluginOptions) {
             fs,
             match
         }) => {
-            const workerFileName = toWorkerImportFromName(fileName);
+            const entryPath = containsEntryPath(fileName, Object.keys(snowpackConfig.mount));
+
+            const toWorkerImportFromName = (fileName, entryPath) => fileName
+                .replace(/\.worker\.worker-proxy/, '.worker')
+                .replace(entryPath, snowpackConfig.mount[entryPath].url);
+
+            const workerFileName = toWorkerImportFromName(fileName, entryPath);
 
             return template({
                 workerFileName
