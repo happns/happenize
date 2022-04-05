@@ -18,7 +18,8 @@ const render = async (filepath, options, entryPath) => {
                 if (solvedNamespace) {
                     const { namespace, nsToDirectiveTagName } = solvedNamespace;
 
-                    data = `[_c_${nsToDirectiveTagName(namespace)}] { ${data} }`;
+                    const directiveTagName = nsToDirectiveTagName(namespace);
+                    data = directiveTagName ? `[_c_${directiveTagName}] { ${data} }` : data;
                 }
 
                 compiler.render(data, { ...options, filename: filepath }, (err, result) => {
