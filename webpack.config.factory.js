@@ -56,7 +56,15 @@ function createConfiguration(moduleName, options = {}) {
 								url: false
 							}
 						},
-						'less-loader',
+						{ 
+							loader: 'less-loader',
+							options: {
+								paths: [
+									// this one for using node_modules as a base folder
+									path.resolve('node_modules')
+								]
+							}
+						},
 						{
 							loader: 'less-namespace.webpack-loader',
 							options: { entryPath }
