@@ -75,11 +75,11 @@ module.exports = function (snowpackConfig, pluginOptions) {
             fs,
             match
         }) => {
-            const entryPath = containsEntryPath(fileName, Object.keys(snowpackConfig.mount));
+            const entryPath = containsEntryPath(fileName, Object.keys(snowpackConfig.entryPaths));
 
             const toWorkerImportFromName = (fileName, entryPath) => fileName
                 .replace(/\.worker\.worker-proxy/, '.worker')
-                .replace(entryPath, snowpackConfig.mount[entryPath].url);
+                .replace(entryPath, snowpackConfig.entryPaths[entryPath]);
 
             const workerFileName = toWorkerImportFromName(fileName, entryPath);
 
