@@ -51,6 +51,10 @@ module.exports = function ({ path: p }, { ls, justImportExt = ['.less', '.css'] 
             module.onHmrUpdate = onHmrUpdate;
         }
 
+        if (module.import.endsWith('.html')) {
+            src += '// @ts-ignore\n'
+        }
+
         src += `import ${module.name}${extImport} from '${module.import}';\n`;
     }
 
