@@ -37,7 +37,8 @@
     "tree-kill": "^1.1.0",
     "webpack": "^4.41.5",
     "webpack-dev-server": "^3.10.3",
-    "webpack-sources": "^1.4.3"
+    "webpack-sources": "^1.4.3",
+    "vite": "2.9.9"
   },
   "scripts": {
     "tsc": "tsc -p src -w",
@@ -64,7 +65,7 @@
     "jest": "^26.4.2",
     "readdirp": "^3.4.0"
   },
-  "peerDependencies": {    
+  "peerDependencies": {
   },
   "bin": {
     "happenize": "index.bin.mjs"
