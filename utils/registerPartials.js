@@ -2,8 +2,8 @@ import registerNamespace from './registerNamespace.js';
 import registerComponent from './registerComponent.js';
 import themeable from './themeable';
 
-export default function registerPartials(components, ns, isThemeable = false) {
-    var App = this && this.compileProvider ? this : window.App;
+export default function registerPartials(components, ns, isThemeable = false, App) {
+    App = App || (this && this.compileProvider ? this : window.App);
 
 	var dotsToCamelCase = input => input.replace(/\.([a-z])/g, x => x[1].toUpperCase());
 
@@ -21,12 +21,12 @@ export default function registerPartials(components, ns, isThemeable = false) {
 	};
 
 	if (components) {
-		registerNamespace(components, registerPartial.bind(this), ns);
+		registerNamespace(components, registerPartial.bind(this), ns, App);
 		registerNamespace(
 			components,
-			(name, x) => x.partials && registerPartials.bind(this)(x.partials, ns && `${ns}.${name}` || name, isThemeable));
+			(name, x) => x.partials && registerPartials.bind(this)(x.partials, ns && `${ns}.${name}` || name, isThemeable, App));
 		registerNamespace(
 			components,
-			(name, x) => x.partials && registerPartials.bind(this)(x.components, ns && `${ns}.${name}` || name, isThemeable));
+			(name, x) => x.partials && registerPartials.bind(this)(x.components, ns && `${ns}.${name}` || name, isThemeable, App));
 	}
 }

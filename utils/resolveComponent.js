@@ -1,8 +1,10 @@
 import registerPartials from './registerPartials.js';
 import registerComponent from './registerComponent.js';
 
-export default function (name, Components) {
-    var App = this && this.compileProvider ? this : window.App;
+const parse = (path, obj) => path.split('.').reduce((o, i) => o[i], obj);
+
+export default function (name, Components, App) {
+    App = App || (this && this.compileProvider ? this : window.App);
 
     App.components = App.components || {};
 
@@ -16,9 +18,9 @@ export default function (name, Components) {
         var rootComponent = App.components[rootComponentName];
 
         if (isRootComponent) {
-            registerPartials(src.partials, name, isThemeable);
-            registerPartials(src.components, name, isThemeable);
-        } else if (rootComponent && !rootComponent.resolved) {
+            registerPartials(src.partials, name, isThemeable, App);
+            registerPartials(src.components, name, isThemeable, App);
+        } else if (rootComponent && !rootComponent.resolved, App) {
             rootComponent.resolve.partials();
         }
     }
@@ -26,7 +28,7 @@ export default function (name, Components) {
     var getComponent = name => {
         var key = name.replace(/\./g, '.components.');
 
-        return DotObject.pick(key, Components)
+        return parse(key, Components)
     };
 
     var src = getComponent(name);

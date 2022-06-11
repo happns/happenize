@@ -1,9 +1,9 @@
-export default function (components, func, ns) {
+export default function (components, func, ns, App) {
 	if (components.async) {
 		return;
 	}
 
-	var App = this && ((typeof (func) === 'string' && this[func]) || this.compileProvider) ? this : window.App;
+	App = App || (this && ((typeof (func) === 'string' && this[func]) || this.compileProvider) ? this : window.App);
 
 	ns = ns && `${ns}.` || '';
 
