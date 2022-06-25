@@ -9,7 +9,7 @@ module.exports = function (code, id, { entryPath }) {
 	});
 
 	if (!solvedNamespace) {
-		return fileContents;
+		return code;
 	}
 
 	const { namespace, camelCaseToDashes } = solvedNamespace;
